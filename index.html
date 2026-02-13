@@ -1,1 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Infinite AI Music</title>
+</head>
+<body style="font-family: Arial; text-align: center; padding: 40px;">
+  <h1>Infinite AI Music Generator</h1>
 
+  <input id="prompt" placeholder="Enter music description..." style="width: 300px; padding: 10px;">
+  <button onclick="generate()">Generate</button>
+
+  <p id="status"></p>
+  <audio id="player" controls></audio>
+
+<script>
+async function generate() {
+  const prompt = document.getElementById("prompt").value;
+  const status = document.getElementById("status");
+  const player = document.getElementById("player");
+
+  status.innerText = "Generating... (can take 20-40 seconds)";
+  player.src = "";
+
+  const res = await fetch("/api/generate", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ prompt })
+  });
+
+  const blob = await res.blob();
+  const url = URL.createObjectURL(blob);
+
+  player.src = url;
+  status.innerText = "Done!";
+}
+</script>
+</body>
+</html>
