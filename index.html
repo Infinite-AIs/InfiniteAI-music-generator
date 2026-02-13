@@ -36,6 +36,8 @@ async function generate() {
   }
 
   const blob = await res.blob();
+  console.log("Blob type:", blob.type);
+  console.log("Blob size:", blob.size);
   console.log("Blob size:", blob.size);
 
   if (blob.size === 0) {
