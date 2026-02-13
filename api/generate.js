@@ -21,22 +21,7 @@ export default async function handler(req, res) {
 
     const contentType = response.headers.get("content-type");
 
-    if (!contentType) {
-      return res.status(500).send("No content-type returned from HF");
-    }
-
-    if (contentType.includes("application/json")) {
+    // If Hugging Face returns JSON (error), stop
+    if (!contentType || contentType.includes("application/json")) {
       const json = await response.json();
-      return res.status(500).send("Hugging Face error: " + JSON.stringify(json));
-    }
-
-    const buffer = await response.arrayBuffer();
-
-    if (buffer.byteLength < 10000) {
-      return res.status(500).send("Audio too small — model may still be loading");
-    }
-
-    res.setHeader("Content-Type", "audio/wav");
-    res.send(Buffer.from(buffer));
-  } catch (err) {
-    conso
+      return res
